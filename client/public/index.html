@@ -1,0 +1,71 @@
+<html>
+	<title>DEMO</title>
+	
+
+<head>
+	<script src="js/axios.min.js"></script>
+	<script src="js/Msg.js"></script>
+	<script src="js/TpAauth.js"></script>
+	<script>
+	
+		function init(){
+			loadContent(
+				"http://localhost:4000/api/auth",
+				"twmtertwerntw.ert",
+				"ifrm_auth"
+			);
+			Msg.listen(data => console.log(data + " ---- "), "*" );
+			
+			test();
+		}
+		
+		function reload(){
+			loadContent(
+				"http://localhost:4000/api/auth2",
+				"twmtertwerntw.ert",
+				"ifrm_auth"
+			);
+		}
+
+		function send(){
+			Msg.sendChild("ifrm_auth", { data: "demo" }, "*" );
+		}
+		
+		
+		function test(){
+
+			axios.post('http://localhost:3001/api/v2/access', {
+				redirectType: 1,
+				extraCSS: 'https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css',
+				redirectUrl: 'https://maxcdn.bootstrapcdn.com'
+			}, {
+				headers:{ 
+					'Authorization':'Basic NjY2OmFhZDM0YXM0NHNlcjQ1',
+					'Access-Control-Allow-Origin': '*',
+					'Content-Type': 'application/x-www-form-urlencoded',
+					'Host': 'httpbin.org',
+				}
+			})
+			.then(response => {
+				console.log(response);
+				//getIframeDoc("ifrm_auth2").src = response.url
+			})
+			.catch(error => {
+				console.log('-----------------------------------------------');
+				console.log(error);
+			});
+				
+		}
+		
+	</script>
+</head>
+<body onload="init()">
+
+	<iframe id="ifrm_auth"></iframe>
+	<button onclick="reload()">Load</button> 
+	<button onclick="send()">Send</button> 
+	<br>
+	
+	<iframe id="ifrm_auth2"></iframe>
+</body>
+</html>

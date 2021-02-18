@@ -1,0 +1,66 @@
+<html>
+	<head>
+	
+		<script>
+		var Msg = {
+
+			sendChild : function (id, data, msg){
+				msg = msg ? msg : '*';
+				const ifr = document.getElementById(id);
+				ifr.contentWindow.postMessage(data, msg);	
+			},
+
+			sendParent : function (data, msg){
+				msg = msg ? msg : '*';
+				parent.postMessage(data, msg);	
+			},
+
+			listen : function (callback, msg){
+				msg = msg ? msg : 'message';
+				window.addEventListener(msg, event => { 
+					console.log(event); 
+					// IMPORTANT: check the origin of the data! 
+					if (event.origin.startsWith( window.location.href )) { 
+						// The data was sent from your site.
+						// Data sent with postMessage is stored in event.data:
+						callback(event.data);
+					} else {
+						// The data was NOT sent from your site! 
+						// Be careful! Do not use it. This else branch is
+						// here just for clarity, you usually shouldn't need it.
+						return; 
+					} 
+				
+				});
+				
+			}
+		}
+
+		var dataIn = 'in';
+		function init(){
+
+			Msg.listen(data => dataIn += data , "*" );
+
+		};
+		
+		function send(){
+			Msg.sendParent({ data: dataIn }, "*" );
+		}
+		</script>
+	</head>
+	<body onload="init()">
+
+		<form action="http://localhost:4000/api/auth2" method="get">
+		  <label for="fname">User:</label><br>
+		  <input type="text" id="user" name="user"><br>
+		  <label for="lname">Password:</label><br>
+		  <input type="password" id="pass" name="pass">
+		  
+		  <input type="submit" value="send1">
+		</form> 
+		
+		
+		<button onclick="send()">Send</button>
+
+	</body>
+</html>
