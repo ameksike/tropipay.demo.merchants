@@ -31,19 +31,19 @@ router.get('/verify', function (req, res) {
 	
 		
 	console.log('-----------------------------');
-	token = security.verifyToken(secret, 1613772297892, '0607c3aadf3bbb691ed463e307647958', 600);
+	token = security.verifyToken('0607c3aadf3bbb691ed463e307647958', secret, 1613772297892, 600);
 	console.log(token);
 			
-	token = security.verifyToken(secret, '1613772297892', '0607c3aadf3bbb691ed463e307647958', 30000);
+	token = security.verifyToken('0607c3aadf3bbb691ed463e307647958', secret, '1613772297892', 30000);
 	console.log(token);
 
-	token = security.verifyToken(secret, '1613772297892', '0607c3aadf3bbb691ed463e307647958');
+	token = security.verifyToken('0607c3aadf3bbb691ed463e307647958', secret, '1613772297892');
 	console.log(token);
 	
-	token = security.verifyToken(secret, 1613772297893, '0607c3aadf3bbb691ed463e307647958');
+	token = security.verifyToken('0607c3aadf3bbb691ed463e307647958', secret, 1613772297893);
 	console.log(token);	
 
-	token = security.verifyToken(secret, 1613772297893, '0607c3aadf3bbb691ed463e307647959');
+	token = security.verifyToken('0607c3aadf3bbb691ed463e307647959', secret, 1613772297893);
 	console.log(token);
 
 	res.send('CODE >>>' + req.query.code );

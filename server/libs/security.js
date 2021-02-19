@@ -10,7 +10,7 @@ const { totp } = require('otplib');
 class Security {
 
     /**
-     * @description generate public token based on totp encode
+     * @description generate public token signature
      * @param key String : public code 
      * @param secret String : private code 
      * @return Object : public token to verify
@@ -21,14 +21,14 @@ class Security {
     }
 
     /**
-     * @description verify public token based on totp encode
+     * @description verify public token signature
      * @param key String : public code 
      * @param secret String : private code 
      * @param token String : public code 
-     * @param time Number difference in milliseconds
+     * @param time Number: difference in milliseconds
      * @return Object
     */
-    verifyToken(secret, key, token, time) {
+    verifyToken(token, secret, key, time) {
 		const diff = time ? Math.floor(Date.now() - parseFloat(key)) : 0;
 		const spected = this.sign(secret, key, 'md5');
         return { secret, key, token: spected === token, diff, expired: diff>=time };
@@ -40,7 +40,8 @@ class Security {
      * @param secret String : private code 
      * @return String : public token to verify
      */
-    generateTokenTime(key, secret) {
+    generateTokenTime(secret, key) {
+        key = key || '13524';
         return this.encode(secret + '-' + key, 'totp');
     }
 
@@ -51,7 +52,8 @@ class Security {
      * @param token String : public code 
      * @return Boolean
     */
-    verifyTokenTime(token, key, secret) {
+    verifyTokenTime(token, secret, key) {
+        key = key || '13524';
         return this.decode(token, 'totp', { secret: secret + '-' + key }, 'totp');
     }
 
